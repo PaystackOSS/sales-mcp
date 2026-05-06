@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <a class="brand" href="/store">StoreFront</a>
+      <a class="cart-link" href="/cart">Cart (<%= cartCount %>)</a>
+    </header>
+
+    <main class="content">
+      <section class="hero">
+        <h1>Millennial Productivity Essentials</h1>
+        <p>Browse our selection of curated items to elevate your productivity.</p>
+      </section>
+
+      <section class="grid">
+        <% const fallback = "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80"; %>
+        <% items.forEach((item) => { %>
+          <article class="card">
+            <img class="product-image" src="<%= item.image_url || fallback %>" alt="<%= item.name %>" loading="lazy" />
+            <div class="card-body">
+              <h2><%= item.name %></h2>
+              <p class="price">$<%= Number(item.price).toFixed(2) %></p>
+              <form method="post" action="/cart/add" class="add-form">
+                <input type="hidden" name="itemId" value="<%= item.id %>" />
+                <label>
+                  Qty
+                  <input type="number" name="quantity" min="1" value="1" required />
+                </label>
+                <button type="submit">Add to cart</button>
+              </form>
+            </div>
+          </article>
+        <% }); %>
+      </section>
+    </main>
+  </body>
+</html>

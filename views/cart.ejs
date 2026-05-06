@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <a class="brand" href="/store">StoreFront</a>
+      <a class="cart-link" href="/store">Back to store</a>
+    </header>
+
+    <main class="content narrow">
+      <h1>Your cart</h1>
+
+      <% if (lines.length === 0) { %>
+        <p>Your cart is empty. <a href="/store">Browse items</a>.</p>
+      <% } else { %>
+        <% const fallback = "https://images.unsplash.com/orange-tabby-cat-sleeping-on-white-textile-eNXZvDGqGbM?auto=format&fit=crop&w=600&q=80"; %>
+        <ul class="line-list">
+          <% lines.forEach((line) => { %>
+            <li class="line-item">
+              <img src="<%= line.item.image_url || fallback %>" alt="<%= line.item.name %>" />
+              <div>
+                <h2><%= line.item.name %></h2>
+                <p><%= line.quantity %> x $<%= Number(line.item.price).toFixed(2) %></p>
+                <p class="line-total">$<%= Number(line.lineTotal).toFixed(2) %></p>
+              </div>
+              <form method="post" action="/cart/remove">
+                <input type="hidden" name="itemId" value="<%= line.item.id %>" />
+                <button type="submit" class="ghost">Remove</button>
+              </form>
+            </li>
+          <% }); %>
+        </ul>
+
+        <div class="summary-row">
+          <strong>Total: $<%= Number(total).toFixed(2) %></strong>
+          <a class="button" href="/checkout">Proceed to checkout</a>
+        </div>
+      <% } %>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <a class="brand" href="/store">StoreFront</a>
+      <a class="cart-link" href="/store">Continue shopping</a>
+    </header>
+
+    <main class="content narrow">
+      <h1>Order confirmed</h1>
+      <p>Thanks <strong><%= user.name %></strong>. A confirmation has been tied to <strong><%= user.email %></strong>.</p>
+
+      <ul class="line-list">
+        <% const fallback = "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80"; %>
+        <% purchases.forEach((entry) => { %>
+          <li class="line-item">
+            <img src="<%= entry.item?.image_url || fallback %>" alt="<%= entry.item?.name || 'Purchased item' %>" />
+            <div>
+              <h2><%= entry.item?.name || `Item #${entry.purchase.item_id}` %></h2>
+              <p><%= entry.purchase.quantity %> units</p>
+              <p>Payment: <%= entry.purchase.payment_id %></p>
+            </div>
+            <p>$<%= Number(entry.purchase.total).toFixed(2) %></p>
+          </li>
+        <% }); %>
+      </ul>
+
+      <p class="order-total">Grand total: $<%= Number(total).toFixed(2) %></p>
+    </main>
+  </body>
+</html>

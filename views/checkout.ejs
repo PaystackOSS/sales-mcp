@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <a class="brand" href="/store"></a>
+      <a class="cart-link" href="/cart">Back to cart</a>
+    </header>
+
+    <main class="content split">
+      <section>
+        <h1>Checkout</h1>
+        <form method="post" action="/checkout" class="checkout-form">
+          <label>
+            Name
+            <input type="text" name="name" required />
+          </label>
+
+          <label>
+            Email
+            <input type="email" name="email" required />
+          </label>
+
+          <button type="submit">Pay and complete purchase</button>
+        </form>
+      </section>
+
+      <aside class="order-box">
+        <h2>Order summary</h2>
+        <% const fallback = "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80"; %>
+        <ul class="line-list compact">
+          <% lines.forEach((line) => { %>
+            <li class="line-item">
+              <img src="<%= line.item.image_url || fallback %>" alt="<%= line.item.name %>" />
+              <div>
+                <h3><%= line.item.name %></h3>
+                <p><%= line.quantity %> x $<%= Number(line.item.price).toFixed(2) %></p>
+              </div>
+              <p>$<%= Number(line.lineTotal).toFixed(2) %></p>
+            </li>
+          <% }); %>
+        </ul>
+        <p class="order-total">Total: $<%= Number(total).toFixed(2) %></p>
+      </aside>
+    </main>
+  </body>
+</html>
