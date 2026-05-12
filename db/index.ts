@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const dbPath = join(__dirname, "sales.sqlite");
+const dbPath = process.env.SALES_DB_PATH ?? join(__dirname, "sales.sqlite");
 
 mkdirSync(dirname(dbPath), { recursive: true });
 
