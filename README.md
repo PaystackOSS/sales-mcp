@@ -79,8 +79,59 @@ Simple TypeScript MCP server for sales operations with a SQLite backend, plus a 
 
   { "action": "add", "userId": 1, "itemId": 1, "quantity": 2 }
 
+## Database location
+
+By default the SQLite database is created at `db/sales.sqlite`, resolved relative to the running `db/index.js` module. This means the MCP server and the web server can end up reading different files depending on how they are launched (e.g. `tsx` from source vs `node dist/server.js` from the build output, or an MCP client launching the server from a different working directory).
+
+To guarantee both processes share the same database, set the `SALES_DB_PATH` environment variable to an absolute path in every place that launches the server.
+
+Shell (web server, dev MCP server, inspector):
+
+```sh
+export SALES_DB_PATH="/absolute/path/to/sales-mcp/db/sales.sqlite"
+npm run web-dev
+# or
+npm run dev
+# or
+SALES_DB_PATH="/absolute/path/to/sales-mcp/db/sales.sqlite" npm run inspect
+```
+
+Claude Desktop (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+
+```json
+{
+  "mcpServers": {
+    "sales-mcp": {
+      "command": "node",
+      "args": ["/absolute/path/to/sales-mcp/dist/server.js"],
+      "env": {
+        "SALES_DB_PATH": "/absolute/path/to/sales-mcp/db/sales.sqlite"
+      }
+    }
+  }
+}
+```
+
+VS Code (`mcp.json`):
+
+```json
+{
+  "servers": {
+    "sales-mcp": {
+      "command": "node",
+      "args": ["/absolute/path/to/sales-mcp/dist/server.js"],
+      "env": {
+        "SALES_DB_PATH": "/absolute/path/to/sales-mcp/db/sales.sqlite"
+      }
+    }
+  }
+}
+```
+
+After changing the env var you must fully restart the MCP client (or use its "Restart Server" command) so the server process is respawned with the new value.
+
 ## Notes
 
-- SQLite database file is created at db/sales.sqlite.
+- SQLite database file defaults to `db/sales.sqlite`; override with `SALES_DB_PATH` (see above).
 - Purchase creation validates user and item, then authorizes payment before insert.
 - On first run, sample items are seeded with image URLs if the items table is empty.
